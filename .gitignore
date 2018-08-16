@@ -1,0 +1,4 @@
+virtualenv-activate
+venv/
+config.ini
+__pycache__/
