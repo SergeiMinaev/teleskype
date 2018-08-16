@@ -7,15 +7,16 @@ from telebot import apihelper
 config = configparser.ConfigParser()
 config.read('config.ini')
 token = config['main']['telegram_token']
-proxy = config['proxy']
 
 
-proxy_string = f"{proxy['proxy_type']}://{proxy['login']}:{proxy['password']}"
-proxy_string += f"@{proxy['hostname']}:{proxy['port']}"
-apihelper.proxy = {'https': proxy_string}
+if config['main']['use_proxy'] == "yes":
+    proxy = config['proxy']
+    proxy_string = f"{proxy['proxy_type']}://{proxy['login']}:{proxy['password']}"
+    proxy_string += f"@{proxy['hostname']}:{proxy['port']}"
+    apihelper.proxy = {'https': proxy_string}
+
 
 bot = telebot.TeleBot(token)
-
 
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
