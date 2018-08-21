@@ -1,6 +1,7 @@
 import configparser
-from time import sleep
+import queue
 import telebot
+from time import sleep
 from telebot import apihelper
 
 
@@ -8,13 +9,13 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 token = config['main']['telegram_token']
 
-
 if config['main']['use_proxy'] == "yes":
     proxy = config['proxy']
     proxy_string = f"{proxy['proxy_type']}://{proxy['login']}:{proxy['password']}"
     proxy_string += f"@{proxy['hostname']}:{proxy['port']}"
     apihelper.proxy = {'https': proxy_string}
 
+msg_queue = queue.Queue()
 
 bot = telebot.TeleBot(token)
 
@@ -27,6 +28,7 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
     bot.reply_to(message, message.text)
+    msg_queue.put(message)
 
 
 def run():
