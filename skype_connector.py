@@ -1,10 +1,11 @@
 import configparser
 import os
-import threading
+from threading import Thread, Timer
 import queue
 from datetime import datetime
 from time import sleep
 from skpy import Skype, SkypeAuthException, SkypeEventLoop
+from hub import outgoing_sk_msg_queue
 
 TOKEN_FILE="skype_token"
 
@@ -12,7 +13,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 msg_queue = queue.Queue()
-
+msg_to_skype_queue = queue.Queue()
 
 class MySkype(SkypeEventLoop):
     def onEvent(self, event):
@@ -20,11 +21,11 @@ class MySkype(SkypeEventLoop):
             if event.msg.user:
                 # ignore self
                 if event.msg.user.id != self.user.id:
-                    event.msg.chat.sendMsg(event.msg.content)
+                    #event.msg.chat.sendMsg(event.msg.content)
                     msg_queue.put(event.msg)
 
 def check_token_loop(conn):
-    threading.Timer(300, check_token_loop, [conn]).start()
+    Timer(300, check_token_loop, [conn]).start()
     token_t = conn.tokenExpiry['skype'].timestamp()
     now_t = datetime.now().timestamp()
     if token_t - now_t < 600:
@@ -40,6 +41,17 @@ def check_token_loop(conn):
         else:
             print("Skype token has been refreshed successfully")
 
+def outgoing_handler(sk):
+    while True:
+        outgoing = outgoing_sk_msg_queue.get()
+        if outgoing == None: break
+        if outgoing['msg'].is_telegram:
+            chat = sk.chats.chat(outgoing['bridge'].skype_id)
+            chat.sendMsg(outgoing['msg'].content)
+
+def loop(sk):
+    sk.loop()
+
 def run():
     print("Skype connector is running")
     sk = Skype(connect=False)
@@ -52,7 +64,8 @@ def run():
                 config['main']['skype_password'])
         sk.conn.getSkypeToken()
 
-    sk_loop = MySkype(tokenFile = TOKEN_FILE, autoAck = True)
-    sk_loop.loop()
+    sk = MySkype(tokenFile = TOKEN_FILE, autoAck = True)
 
+    loop_thread = Thread(target = loop, args=(sk,)).start()
+    outgoing_thread = Thread(target = outgoing_handler, args=(sk,)).start()
     check_token_loop(sk.conn)

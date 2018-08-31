@@ -7,9 +7,18 @@ import skype_connector
 import skype_parser
 import telegram_parser
 import hub
+from models import db, Bridge
+
 
 def ctrl_c_handler(sig, frame):
+    db.close()
     sys.exit(0)
+
+
+def init_db():
+    db.connect(reuse_if_open=True)
+    db.create_tables([Bridge])
+
 
 signal.signal(signal.SIGINT, ctrl_c_handler)
 

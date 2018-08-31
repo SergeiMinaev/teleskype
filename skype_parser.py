@@ -1,6 +1,7 @@
 import queue
 from skype_connector import msg_queue
-from telegram_parser import parsed_msg_queue
+#from telegram_parser import parsed_msg_queue
+from common import parsed_msg_queue
 
 
 class CommonMsg:

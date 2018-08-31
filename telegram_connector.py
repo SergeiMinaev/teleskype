@@ -1,9 +1,10 @@
 import configparser
 import queue
 import telebot
+from threading import Thread
 from time import sleep
 from telebot import apihelper
-
+from hub import outgoing_tele_msg_queue
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -27,11 +28,23 @@ def send_welcome(message):
 # Handle all messages with content_type 'text'
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
-    bot.reply_to(message, message.text)
+    #bot.reply_to(message, message.text)
     msg_queue.put(message)
 
 
+def outgoing_handler():
+    while True:
+        outgoing = outgoing_tele_msg_queue.get()
+        if outgoing == None: break
+        if outgoing['msg'].is_skype:
+            bot.send_message(
+                    outgoing['bridge'].telegram_id,
+                    outgoing['msg'].content,
+                    parse_mode='HTML')
+
+
 def run():
+    outgoing_thread = Thread(target = outgoing_handler).start()
     while True:
         try:
             print("Telegram connector is running")
