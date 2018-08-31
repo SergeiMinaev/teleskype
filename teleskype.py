@@ -21,7 +21,7 @@ def init_db():
 
 
 signal.signal(signal.SIGINT, ctrl_c_handler)
-
+init_db()
 
 skype_thread = Thread(target = skype_connector.run).start()
 telegram_thread = Thread(target = telegram_connector.run).start()
