@@ -1,4 +1,7 @@
+import queue
 from telegram_connector import msg_queue
+
+parsed_msg_queue = queue.Queue()
 
 class CommonMsg:
     is_skype = False
@@ -14,6 +17,4 @@ def parse_msg():
         if tele_msg == None: break
         msg = CommonMsg()
         msg.content = tele_msg.text
-        print('--------')
-        print('Telegram: ', msg.content)
-        print('--------')
+        parsed_msg_queue.put(msg)

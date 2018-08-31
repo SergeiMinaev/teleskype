@@ -17,8 +17,8 @@ msg_queue = queue.Queue()
 class MySkype(SkypeEventLoop):
     def onEvent(self, event):
         if event.type == 'NewMessage' and type(event).__name__ == 'SkypeNewMessageEvent':
-            # ignore self
             if event.msg.user:
+                # ignore self
                 if event.msg.user.id != self.user.id:
                     event.msg.chat.sendMsg(event.msg.content)
                     msg_queue.put(event.msg)
