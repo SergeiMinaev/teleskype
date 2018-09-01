@@ -36,7 +36,13 @@ def outgoing_handler():
     while True:
         outgoing = outgoing_tele_msg_queue.get()
         if outgoing == None: break
-        if outgoing['msg'].is_skype:
+        if outgoing['bot_direct_msg']:
+            if outgoing['msg'].is_telegram:
+                bot.send_message(
+                        outgoing['msg'].chat_id,
+                        outgoing['msg'].content,
+                        parse_mode='HTML')
+        elif outgoing['msg'].is_skype:
             bot.send_message(
                     outgoing['bridge'].telegram_id,
                     outgoing['msg'].content,
