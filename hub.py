@@ -5,7 +5,10 @@ from bot import bot
 
 
 query = Bridge.select()
-bridges = [bridge for bridge in query]
+try:
+    bridges = [bridge for bridge in query]
+except:
+    bridges = []
 
 outgoing_tele_msg_queue = queue.Queue()
 outgoing_sk_msg_queue = queue.Queue()
