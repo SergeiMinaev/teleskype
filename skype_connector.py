@@ -6,7 +6,7 @@ from datetime import datetime
 from time import sleep
 from skpy import Skype, SkypeAuthException, SkypeEventLoop
 from hub import outgoing_sk_msg_queue
-from common import incoming_msg_queue
+from common import incoming_msg_queue, is_image
 from skype_parser import parse_incoming_msg
 
 TOKEN_FILE="skype_token"
@@ -56,6 +56,19 @@ def outgoing_handler(sk):
         if chat_id:
             chat = sk.chats.chat(chat_id)
             chat.sendMsg(outgoing['msg'].content_full)
+            if outgoing['msg'].file_obj['obj']:
+                if is_image(outgoing['msg'].file_obj['name']):
+                    chat.sendFile(
+                            outgoing['msg'].file_obj['obj'],
+                            outgoing['msg'].file_obj['name'],
+                            image = True)
+                else:
+                    chat.sendFile(
+                            outgoing['msg'].file_obj['obj'],
+                            outgoing['msg'].file_obj['name'],
+                            image = False)
+
+
 
 def loop(sk):
     sk.loop()

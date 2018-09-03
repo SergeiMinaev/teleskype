@@ -1,11 +1,13 @@
 import configparser
 import queue
 import telebot
+from io import BytesIO
+from PIL import Image
 from threading import Thread
 from time import sleep
 from telebot import apihelper
 from hub import outgoing_tele_msg_queue
-from common import incoming_msg_queue, is_image
+from common import incoming_msg_queue, is_image, bytes_to_object
 from telegram_parser import parse_incoming_msg
 
 config = configparser.ConfigParser()
@@ -31,6 +33,30 @@ def send_welcome(message):
 def echo_message(message):
     #bot.reply_to(message, message.text)
     message = parse_incoming_msg(message)
+    incoming_msg_queue.put(message)
+
+
+@bot.message_handler(content_types=['photo'])
+def photo_handler(message):
+    photo_file = bot.get_file(message.photo[len(message.photo)-1].file_id)
+    photo_content = bot.download_file(photo_file.file_path)
+    file_obj = bytes_to_object(photo_content, photo_file.file_path.split('/')[-1])
+    message = parse_incoming_msg(message, content_type='photo', file_obj=file_obj)
+    incoming_msg_queue.put(message)
+
+
+@bot.message_handler(content_types=['sticker'])
+def sticker_handler(message):
+    photo_file = bot.get_file(message.sticker.file_id)
+    photo_content = bot.download_file(photo_file.file_path)
+    filename = photo_file.file_path.split('/')[-1]
+    file_obj = bytes_to_object(photo_content, filename)
+    png_obj = BytesIO()
+    im = Image.open(file_obj).convert('RGBA')
+    im.save(png_obj, format='PNG')
+    file_obj.close()
+    png_obj.seek(0)
+    message = parse_incoming_msg(message, content_type='photo', file_obj=png_obj)
     incoming_msg_queue.put(message)
 
 
