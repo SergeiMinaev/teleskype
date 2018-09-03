@@ -1,8 +1,14 @@
 import secrets
+import configparser
 from common import CommonMsg
 from models import Bridge
 
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 TMP_BRIDGES = []
+BOT_NAME = config['main']['bot_name']
 
 def make_msg(text, inc_msg):
     msg = CommonMsg()
@@ -12,14 +18,14 @@ def make_msg(text, inc_msg):
     msg.user = inc_msg.user
     msg.time = inc_msg.time
     msg.content = text
-    msg.content_full = f'[bot] {text}'
+    msg.content_full = f'[{BOT_NAME}] {text}'
     return msg
 
 
 def cmd_help(cmd):
     result = f"""Available commands:
-    -bot make bridge - creates a new bridge and returns a secret code.
-    -bot use bridge [secret code] - tries to connect to another chat with \
+    -{BOT_NAME} make bridge - creates a new bridge and returns a secret code.
+    -{BOT_NAME} use bridge [secret code] - tries to connect to another chat with \
 specified secret code.
     """
     return result
@@ -44,8 +50,8 @@ def make_bridge(msg):
         another_chat = 'skype'
     else:
         another_chat = 'telegram'
-    result_msg = 'New bridge opened. Type this in '\
-            + another_chat + ' chat:\n-bot use bridge ' + secret
+    result_msg = f"""New bridge opened. \
+Type this in {another_chat} chat:\n-{BOT_NAME} use bridge {secret}"""
     return result_msg
 
 
@@ -53,7 +59,8 @@ def use_bridge(cmd, msg):
     global TMP_BRIDGES
     secret = cmd.split('use bridge')[1].strip()
     if len(secret) == 0:
-        return 'The secret code is not specified. Example: -bot use bridge 1234abcd'
+        return f"""The secret code is not specified. \n
+Example: -{BOT_NAME} use bridge 1234abcd"""
     for BRIDGE in TMP_BRIDGES:
         if BRIDGE['secret'] == secret:
             if msg.is_skype:
@@ -67,8 +74,8 @@ def use_bridge(cmd, msg):
 
 def bot(msg):
     r = None
-    if msg.content.startswith('-bot'):
-        cmd = msg.content.split('-bot')[1].strip()
+    if msg.content.startswith(f'-{BOT_NAME}'):
+        cmd = msg.content.split(f'{BOT_NAME}')[1].strip()
         if cmd == 'help': r = cmd_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
         elif cmd.startswith('use bridge'): r = use_bridge(cmd, msg)
