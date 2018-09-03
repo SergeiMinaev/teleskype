@@ -5,7 +5,7 @@ from threading import Thread
 from time import sleep
 from telebot import apihelper
 from hub import outgoing_tele_msg_queue
-from common import incoming_msg_queue
+from common import incoming_msg_queue, is_image
 from telegram_parser import parse_incoming_msg
 
 config = configparser.ConfigParser()
@@ -49,9 +49,14 @@ def outgoing_handler():
                     outgoing['msg'].content_full,
                     parse_mode='HTML')
             if outgoing['msg'].file_obj['obj']:
-                bot.send_photo(
-                        chat_id,
-                        outgoing['msg'].file_obj['obj'])
+                if is_image(outgoing['msg'].file_obj['name']):
+                    bot.send_photo(
+                            chat_id,
+                            outgoing['msg'].file_obj['obj'])
+                else:
+                    bot.send_document(
+                            chat_id,
+                            outgoing['msg'].file_obj['obj'])
 
 
 

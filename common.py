@@ -1,5 +1,6 @@
 import queue
 from io import BytesIO
+from os import path
 
 
 incoming_msg_queue = queue.Queue()
@@ -20,3 +21,9 @@ def bytes_to_object(content, name):
     file_obj = BytesIO(content)
     file_obj.name = name
     return file_obj
+
+
+def is_image(filename):
+    extensions = ['.png', '.jpg', '.jpeg', '.gif']
+    name, ext = path.splitext(filename)
+    return ext.lower() in extensions
