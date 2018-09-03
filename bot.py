@@ -17,7 +17,12 @@ def make_msg(text, inc_msg):
 
 
 def cmd_help(cmd):
-    return "Hello! I'm teleskype bot. I can't do anything yet :("
+    result = f"""Available commands:
+    -bot make bridge - creates a new bridge and returns a secret code.
+    -bot use bridge [secret code] - tries to connect to another chat with \
+specified secret code.
+    """
+    return result
 
 
 def make_bridge(msg):
