@@ -1,7 +1,7 @@
 import queue
 from common import incoming_msg_queue
 from models import db, Bridge
-from bot import bot
+from bot.main import bot
 
 
 query = Bridge.select()
@@ -44,7 +44,9 @@ def hub():
         bridge = find_the_bridge(msg)
         if bridge:
             forward_to_bridge(bridge, msg)
-        bot_response = bot(msg)
+        bot_response = None
+        if not msg.file_obj['obj']:
+            bot_response = bot(msg)
         if bot_response:
             if bridge:
                 forward_to_bridge(bridge, bot_response)

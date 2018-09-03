@@ -48,6 +48,11 @@ def outgoing_handler():
                     chat_id,
                     outgoing['msg'].content_full,
                     parse_mode='HTML')
+            if outgoing['msg'].file_obj['obj']:
+                bot.send_photo(
+                        chat_id,
+                        outgoing['msg'].file_obj['obj'])
+
 
 
 def run():
