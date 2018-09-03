@@ -8,7 +8,11 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 TMP_BRIDGES = []
-BOT_NAME = config['main']['bot_name']
+BOT_NAME = config['bot']['name']
+if config['bot']['cmd_without_dash'] == 'yes':
+    CMD_SIGN = ''
+else:
+    CMD_SIGN = '-'
 
 def make_msg(text, inc_msg):
     msg = CommonMsg()
@@ -24,8 +28,8 @@ def make_msg(text, inc_msg):
 
 def cmd_help(cmd):
     result = f"""Available commands:
-    -{BOT_NAME} make bridge - creates a new bridge and returns a secret code.
-    -{BOT_NAME} use bridge [secret code] - tries to connect to another chat with \
+    {CMD_SIGN}{BOT_NAME} make bridge - creates a new bridge and returns a secret code.
+    {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to another chat with \
 specified secret code.
     """
     return result
@@ -51,7 +55,7 @@ def make_bridge(msg):
     else:
         another_chat = 'telegram'
     result_msg = f"""New bridge opened. \
-Type this in {another_chat} chat:\n-{BOT_NAME} use bridge {secret}"""
+Type this in {another_chat} chat:\n{CMD_SIGN}{BOT_NAME} use bridge {secret}"""
     return result_msg
 
 
@@ -60,7 +64,7 @@ def use_bridge(cmd, msg):
     secret = cmd.split('use bridge')[1].strip()
     if len(secret) == 0:
         return f"""The secret code is not specified. \n
-Example: -{BOT_NAME} use bridge 1234abcd"""
+Example: {CMD_SIGN}{BOT_NAME} use bridge 1234abcd"""
     for BRIDGE in TMP_BRIDGES:
         if BRIDGE['secret'] == secret:
             if msg.is_skype:
@@ -74,7 +78,7 @@ Example: -{BOT_NAME} use bridge 1234abcd"""
 
 def bot(msg):
     r = None
-    if msg.content.startswith(f'-{BOT_NAME}'):
+    if msg.content.startswith(f'{CMD_SIGN}{BOT_NAME}'):
         cmd = msg.content.split(f'{BOT_NAME}')[1].strip()
         if cmd == 'help': r = cmd_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)

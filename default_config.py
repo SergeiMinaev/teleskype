@@ -1,7 +1,10 @@
 [main]
 telegram_token = TOKEN
 use_proxy = no
-bot_name = bot
+
+[bot]
+name = bot
+cmd_without_dash = no
 
 [proxy]
 proxy_type = socks5
