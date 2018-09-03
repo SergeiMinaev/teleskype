@@ -9,9 +9,10 @@ def make_msg(text, inc_msg):
     msg.is_skype = True
     msg.is_telegram = True
     msg.chat_id = inc_msg.chat_id
-    msg.user_id = inc_msg.user_id
+    msg.user = inc_msg.user
     msg.time = inc_msg.time
     msg.content = text
+    msg.content_full = f'[bot] {text}'
     return msg
 
 
@@ -34,7 +35,6 @@ def make_bridge(msg):
         'secret': secret,
         'telegram_id': telegram_id,
         'skype_id': skype_id})
-    print(TMP_BRIDGES)
     if msg.is_telegram:
         another_chat = 'skype'
     else:
@@ -59,8 +59,6 @@ def use_bridge(cmd, msg):
                     telegram_id = BRIDGE['telegram_id'],
                     skype_id = BRIDGE['skype_id'])
             return 'The connection is established successfully'
-        else:
-            print(len(BRIDGE['secret']), ' is not equal to ', len(secret))
 
 def bot(msg):
     r = None

@@ -5,6 +5,8 @@ from threading import Thread
 from time import sleep
 from telebot import apihelper
 from hub import outgoing_tele_msg_queue
+from common import incoming_msg_queue
+from telegram_parser import parse_incoming_msg
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -16,7 +18,6 @@ if config['main']['use_proxy'] == "yes":
     proxy_string += f"@{proxy['hostname']}:{proxy['port']}"
     apihelper.proxy = {'https': proxy_string}
 
-msg_queue = queue.Queue()
 
 bot = telebot.TeleBot(token)
 
@@ -29,23 +30,23 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
     #bot.reply_to(message, message.text)
-    msg_queue.put(message)
+    message = parse_incoming_msg(message)
+    incoming_msg_queue.put(message)
 
 
 def outgoing_handler():
     while True:
         outgoing = outgoing_tele_msg_queue.get()
         if outgoing == None: break
-        if outgoing['bot_direct_msg']:
-            if outgoing['msg'].is_telegram:
-                bot.send_message(
-                        outgoing['msg'].chat_id,
-                        outgoing['msg'].content,
-                        parse_mode='HTML')
-        elif outgoing['msg'].is_skype:
+        chat_id = None
+        if not outgoing['bridge']: # direct message
+            chat_id = outgoing['msg'].chat_id
+        elif outgoing['msg'].is_skype: # forwarded message from skype to telegram
+            chat_id = outgoing['bridge'].telegram_id
+        if chat_id:
             bot.send_message(
-                    outgoing['bridge'].telegram_id,
-                    outgoing['msg'].content,
+                    chat_id,
+                    outgoing['msg'].content_full,
                     parse_mode='HTML')
 
 

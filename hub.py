@@ -1,5 +1,5 @@
 import queue
-from common import parsed_msg_queue
+from common import incoming_msg_queue
 from models import db, Bridge
 from bot import bot
 
@@ -27,26 +27,19 @@ def find_the_bridge(msg):
     return bridge
 
 
-def forward_to_bridge(bridge, msg, bot_direct_msg=False):
-    outgoing_tele_msg_queue.put({
-        'bridge': bridge,
-        'msg': msg,
-        'bot_direct_msg': bot_direct_msg})
-    outgoing_sk_msg_queue.put({
-        'bridge': bridge,
-        'msg': msg,
-        'bot_direct_msg': bot_direct_msg})
-
-
-def handle_bot_response_direct(msg, bot_response):
-    bot_response.is_skype = msg.is_skype
-    bot_response.is_telegram = msg.is_telegram
-    forward_to_bridge(None, bot_response, True)
-
+def forward_to_bridge(bridge, bot_response, to_telegram=True, to_skype=True):
+    if to_telegram:
+        outgoing_tele_msg_queue.put({
+            'bridge': bridge,
+            'msg': bot_response})
+    if to_skype:
+        outgoing_sk_msg_queue.put({
+            'bridge': bridge,
+            'msg': bot_response})
 
 def hub():
     while True:
-        msg = parsed_msg_queue.get()
+        msg = incoming_msg_queue.get()
         if msg == None: break
         bridge = find_the_bridge(msg)
         if bridge:
@@ -56,4 +49,6 @@ def hub():
             if bridge:
                 forward_to_bridge(bridge, bot_response)
             else:
-                handle_bot_response_direct(msg, bot_response)
+                to_telegram = msg.is_telegram
+                to_skype = msg.is_skype
+                forward_to_bridge(None, bot_response, to_telegram, to_skype)

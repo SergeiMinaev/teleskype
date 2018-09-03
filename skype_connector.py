@@ -6,13 +6,14 @@ from datetime import datetime
 from time import sleep
 from skpy import Skype, SkypeAuthException, SkypeEventLoop
 from hub import outgoing_sk_msg_queue
+from common import incoming_msg_queue
+from skype_parser import parse_incoming_msg
 
 TOKEN_FILE="skype_token"
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-msg_queue = queue.Queue()
 msg_to_skype_queue = queue.Queue()
 
 class MySkype(SkypeEventLoop):
@@ -22,7 +23,8 @@ class MySkype(SkypeEventLoop):
                 # ignore self
                 if event.msg.user.id != self.user.id:
                     #event.msg.chat.sendMsg(event.msg.content)
-                    msg_queue.put(event.msg)
+                    msg = parse_incoming_msg(event.msg)
+                    incoming_msg_queue.put(msg)
 
 def check_token_loop(conn):
     Timer(300, check_token_loop, [conn]).start()
@@ -41,17 +43,19 @@ def check_token_loop(conn):
         else:
             print("Skype token has been refreshed successfully")
 
+
 def outgoing_handler(sk):
     while True:
         outgoing = outgoing_sk_msg_queue.get()
         if outgoing == None: break
-        if outgoing['bot_direct_msg']:
-            if outgoing['msg'].is_skype:
-                chat = sk.chats.chat(outgoing['msg'].chat_id)
-                chat.sendMsg(outgoing['msg'].content)
-        elif outgoing['msg'].is_telegram:
-            chat = sk.chats.chat(outgoing['bridge'].skype_id)
-            chat.sendMsg(outgoing['msg'].content)
+        chat_id = None
+        if not outgoing['bridge']: # direct message
+            chat_id = outgoing['msg'].chat_id
+        elif outgoing['msg'].is_telegram: # forwarded message from telegram to skype
+            chat_id = outgoing['bridge'].skype_id
+        if chat_id:
+            chat = sk.chats.chat(chat_id)
+            chat.sendMsg(outgoing['msg'].content_full)
 
 def loop(sk):
     sk.loop()
