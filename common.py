@@ -27,3 +27,11 @@ def is_image(filename):
     extensions = ['.png', '.jpg', '.jpeg', '.gif']
     name, ext = path.splitext(filename)
     return ext.lower() in extensions
+
+
+def doc(docstring):
+    def document(func):
+        func.__doc__ = docstring
+        return func
+
+    return document

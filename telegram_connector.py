@@ -70,11 +70,13 @@ def outgoing_handler():
         elif outgoing['msg'].is_skype: # forwarded message from skype to telegram
             chat_id = outgoing['bridge'].telegram_id
         if chat_id:
-            bot.send_message(
-                    chat_id,
-                    outgoing['msg'].content_full,
-                    parse_mode='HTML')
+            if outgoing['msg'].content_full:
+                bot.send_message(
+                        chat_id,
+                        outgoing['msg'].content_full,
+                        parse_mode='HTML')
             if outgoing['msg'].file_obj['obj']:
+                outgoing['msg'].file_obj['obj'].seek(0)
                 if is_image(outgoing['msg'].file_obj['name']):
                     bot.send_photo(
                             chat_id,

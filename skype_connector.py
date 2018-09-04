@@ -55,9 +55,12 @@ def outgoing_handler(sk):
             chat_id = outgoing['bridge'].skype_id
         if chat_id:
             chat = sk.chats.chat(chat_id)
-            chat.sendMsg(outgoing['msg'].content_full)
+            if outgoing['msg'].content_full:
+                chat.sendMsg(outgoing['msg'].content_full)
             if outgoing['msg'].file_obj['obj']:
+                print('going to send file')
                 if is_image(outgoing['msg'].file_obj['name']):
+                    outgoing['msg'].file_obj['obj'].seek(0)
                     chat.sendFile(
                             outgoing['msg'].file_obj['obj'],
                             outgoing['msg'].file_obj['name'],

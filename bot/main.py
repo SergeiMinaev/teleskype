@@ -2,6 +2,7 @@ import secrets
 import configparser
 from common import CommonMsg
 from models import Bridge
+from bot.show_image import show_image
 
 
 config = configparser.ConfigParser()
@@ -14,15 +15,18 @@ if config['bot']['cmd_without_dash'] == 'yes':
 else:
     CMD_SIGN = '-'
 
-def make_msg(text, inc_msg):
+def make_msg(response, inc_msg):
     msg = CommonMsg()
     msg.is_skype = True
     msg.is_telegram = True
     msg.chat_id = inc_msg.chat_id
     msg.user = inc_msg.user
     msg.time = inc_msg.time
-    msg.content = text
-    msg.content_full = f'[{BOT_NAME}] {text}'
+    if hasattr(response, 'read'): # if response is file-like object
+        msg.file_obj = {'name': 'image.jpg', 'obj': response}
+    else:
+        msg.content = response
+        msg.content_full = f'[{BOT_NAME}] {response}'
     return msg
 
 
@@ -31,9 +35,31 @@ def cmd_help(cmd):
     {CMD_SIGN}{BOT_NAME} make bridge - creates a new bridge and returns a secret code.
     {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to another chat with \
 specified secret code.
+
+Available modules:
+    show_image
+Type '{CMD_SIGN}{BOT_NAME} help [module name] to get help on a specific module.
     """
     return result
 
+def module_help(cmd):
+    module_name = cmd.split('help')[1].strip().lower()
+    bot_module = None
+    doc_string = None
+    try:
+        bot_module = globals()[module_name]
+    except:
+        return f"Module {module_name} not found"
+    if bot_module:
+        doc_string = bot_module.__doc__.strip()
+    if not doc_string:
+        result = f"Module {module_name} doesn't have a documentation"
+    else:
+        result = f"""
+        {module_name} help:
+        {doc_string}
+        """
+    return result
 
 def make_bridge(msg):
     global TMP_BRIDGES
@@ -79,10 +105,13 @@ Example: {CMD_SIGN}{BOT_NAME} use bridge 1234abcd"""
 def bot(msg):
     r = None
     if msg.content.startswith(f'{CMD_SIGN}{BOT_NAME}'):
-        cmd = msg.content.split(f'{BOT_NAME}')[1].strip()
+        cmd = msg.content.split(f'{BOT_NAME}')[1].strip().lower()
         if cmd == 'help': r = cmd_help(cmd)
+        elif cmd.startswith('help'): r = module_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
         elif cmd.startswith('use bridge'): r = use_bridge(cmd, msg)
+        else:
+            r = show_image(cmd)
         if r:
             r = make_msg(r, msg)
     return r
