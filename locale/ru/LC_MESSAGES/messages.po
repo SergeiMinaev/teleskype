@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-05 23:01+0300\n"
+"POT-Creation-Date: 2018-09-06 01:28+0300\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #: bot/main.py:41
@@ -19,8 +19,7 @@ msgid ""
 "    {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to "
 "another chat with specified secret code.\n"
 "    {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.\n"
-"    {CMD_SIGN}{BOT_NAME} ping - ping? pong!\n"
-"    {CMD_SIGN}{BOT_NAME} {ping_help}\n"
+"    {CMD_SIGN}{BOT_NAME} ping - {ping_help}\n"
 "\n"
 "Available modules:\n"
 "    show_image\n"
@@ -29,24 +28,41 @@ msgid ""
 "    "
 msgstr ""
 
-#: bot/main.py:62
+#: bot/main.py:61
 #, python-brace-format
 msgid "Module {0} not found"
 msgstr "Модуль {0} не найден"
 
-#: bot/main.py:119
+#: bot/main.py:118
 msgid "pong"
 msgstr "понг"
 
-#: bot/main.py:126
+#: bot/main.py:125
 #, python-brace-format
 msgid "Language is set to: {0}"
 msgstr "Язык сменен на: {0}"
 
-#: bot/main.py:128
+#: bot/main.py:127
 #, python-brace-format
 msgid "Can't set language to: {0}"
 msgstr "Не могу изменить язык на: {0}"
+
+#: bot/show_image.py:28
+#, python-brace-format
+msgid ""
+"\n"
+"Shows random image by specified keyword.\n"
+"Available keywords:\n"
+"    {aliases_string}\n"
+"Example usage:\n"
+"    {CMD_SIGN}{BOT_NAME} {first_aliase}"
+msgstr ""
+"\n"
+"Показывает случайное изображение по указанному ключевому слову.\n"
+"Доступные ключевые слова:\n"
+"    {aliases_string}\n"
+"Пример использования:\n"
+"    {CMD_SIGN}{BOT_NAME} {first_aliase}"
 
 #~ msgid "ping"
 #~ msgstr "пинг"
