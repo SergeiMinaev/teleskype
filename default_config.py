@@ -1,6 +1,7 @@
 [main]
 telegram_token = TOKEN
 use_proxy = no
+lang = en
 
 [bot]
 name = bot

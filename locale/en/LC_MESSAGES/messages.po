@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-05 04:54+0300\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: bot/main.py:35
+#, python-brace-format
+msgid ""
+"Available commands:\n"
+"    {CMD_SIGN}{BOT_NAME} make bridge - creates a new bridge and returns a "
+"secret code.\n"
+"    {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to "
+"another chat with specified secret code.\n"
+"    {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.\n"
+"\n"
+"Available modules:\n"
+"    show_image\n"
+"Type {CMD_SIGN}{BOT_NAME} help [module name] to get help on a specific "
+"module.\n"
+"    "
+msgstr ""
+
+#: bot/main.py:54
+#, python-brace-format
+msgid "Module {0} not found"
+msgstr ""
+
+#: bot/main.py:112
+#, python-brace-format
+msgid "Language is set to: {0}"
+msgstr ""
+
+#: bot/main.py:114
+#, python-brace-format
+msgid "Can't set language to: {0}"
+msgstr ""

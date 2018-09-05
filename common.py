@@ -1,7 +1,12 @@
 import queue
+import gettext
+import configparser
 from io import BytesIO
 from os import path
 
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 incoming_msg_queue = queue.Queue()
 
@@ -35,3 +40,12 @@ def doc(docstring):
         return func
 
     return document
+
+
+def init_loc(user_lang = None):
+    if user_lang:
+        lang = user_lang
+    else:
+        lang = config['main']['lang']
+    loc = gettext.translation('messages', localedir='./locale', languages=[lang])
+    loc.install()

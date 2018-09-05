@@ -6,6 +6,7 @@ import telegram_connector
 import skype_connector
 import hub
 from models import db, Bridge
+from common import init_loc
 
 
 def ctrl_c_handler(sig, frame):
@@ -18,8 +19,10 @@ def init_db():
     db.create_tables([Bridge])
 
 
+
 signal.signal(signal.SIGINT, ctrl_c_handler)
 init_db()
+init_loc()
 
 skype_thread = Thread(target = skype_connector.run).start()
 telegram_thread = Thread(target = telegram_connector.run).start()

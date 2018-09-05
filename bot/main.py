@@ -1,6 +1,6 @@
 import secrets
 import configparser
-from common import CommonMsg
+from common import CommonMsg, init_loc
 from models import Bridge
 from bot.show_image import show_image
 
@@ -14,6 +14,7 @@ if config['bot']['cmd_without_dash'] == 'yes':
     CMD_SIGN = ''
 else:
     CMD_SIGN = '-'
+
 
 def make_msg(response, inc_msg):
     msg = CommonMsg()
@@ -31,15 +32,16 @@ def make_msg(response, inc_msg):
 
 
 def cmd_help(cmd):
-    result = f"""Available commands:
+    result = _("""Available commands:
     {CMD_SIGN}{BOT_NAME} make bridge - creates a new bridge and returns a secret code.
     {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to another chat with \
 specified secret code.
+    {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.
 
 Available modules:
     show_image
-Type '{CMD_SIGN}{BOT_NAME} help [module name] to get help on a specific module.
-    """
+Type {CMD_SIGN}{BOT_NAME} help [module name] to get help on a specific module.
+    """).format(CMD_SIGN=CMD_SIGN, BOT_NAME=BOT_NAME)
     return result
 
 def module_help(cmd):
@@ -49,7 +51,7 @@ def module_help(cmd):
     try:
         bot_module = globals()[module_name]
     except:
-        return f"Module {module_name} not found"
+        return _("Module {0} not found").format(module_name)
     if bot_module:
         doc_string = bot_module.__doc__.strip()
     if not doc_string:
@@ -102,6 +104,15 @@ Example: {CMD_SIGN}{BOT_NAME} use bridge 1234abcd"""
                     skype_id = BRIDGE['skype_id'])
             return 'The connection is established successfully'
 
+
+def set_lang(cmd):
+    lang = cmd.split('set lang')[1].strip().lower()
+    try:
+        init_loc(lang)
+        return _("Language is set to: {0}").format(lang)
+    except:
+        return _("Can't set language to: {0}").format(lang)
+
 def bot(msg):
     r = None
     if msg.content.startswith(f'{CMD_SIGN}{BOT_NAME}'):
@@ -110,6 +121,7 @@ def bot(msg):
         elif cmd.startswith('help'): r = module_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
         elif cmd.startswith('use bridge'): r = use_bridge(cmd, msg)
+        elif cmd.startswith('set lang'): r = set_lang(cmd)
         else:
             r = show_image(cmd)
         if r:
