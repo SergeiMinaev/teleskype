@@ -129,8 +129,8 @@ def set_lang(cmd):
 
 def bot(msg):
     r = None
-    if msg.content.startswith(f'{CMD_SIGN}{BOT_NAME}'):
-        cmd = msg.content.split(f'{BOT_NAME}')[1].strip().lower()
+    if msg.content.startswith(f'{CMD_SIGN}{BOT_NAME} '):
+        cmd = msg.content.split(f'{BOT_NAME} ')[1].strip().lower()
         if cmd == 'help': r = cmd_help(cmd)
         elif cmd.startswith('help'): r = module_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
