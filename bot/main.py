@@ -37,6 +37,7 @@ def cmd_help(cmd):
     {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to another chat with \
 specified secret code.
     {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.
+    {CMD_SIGN}{BOT_NAME} ping - ping? pong!
 
 Available modules:
     show_image
@@ -105,6 +106,9 @@ Example: {CMD_SIGN}{BOT_NAME} use bridge 1234abcd"""
             return 'The connection is established successfully'
 
 
+def ping():
+    return _('pong')
+
 def set_lang(cmd):
     lang = cmd.split('set lang')[1].strip().lower()
     try:
@@ -120,6 +124,7 @@ def bot(msg):
         if cmd == 'help': r = cmd_help(cmd)
         elif cmd.startswith('help'): r = module_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
+        elif cmd == 'ping': r = ping()
         elif cmd.startswith('use bridge'): r = use_bridge(cmd, msg)
         elif cmd.startswith('set lang'): r = set_lang(cmd)
         else:

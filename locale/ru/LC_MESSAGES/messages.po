@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-05 04:54+0300\n"
+"POT-Creation-Date: 2018-09-05 19:21+0300\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #: bot/main.py:35
@@ -19,6 +19,7 @@ msgid ""
 "    {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to "
 "another chat with specified secret code.\n"
 "    {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.\n"
+"    {CMD_SIGN}{BOT_NAME} ping - ping? pong!\n"
 "\n"
 "Available modules:\n"
 "    show_image\n"
@@ -26,34 +27,53 @@ msgid ""
 "module.\n"
 "    "
 msgstr ""
-"Доступные команды:\n"
-"    {CMD_SIGN}{BOT_NAME} make bridge - создает новый мост и возвращает "
-"секретный код, который нужно указать в другом чате с помощью команды "
-"{CMD_SIGN}{BOT_NAME} use bridge.\n"
-"    {CMD_SIGN}{BOT_NAME} use bridge [секретный код] - попытка соединить два "
-"чата.\n"
-"    {CMD_SIGN}{BOT_NAME} set lang [язык] - изменить язык.\n"
-"\n"
-"Доступные модули:\n"
-"    show_image\n"
-"Введите {CMD_SIGN}{BOT_NAME} help [название модуля] для получения справки по "
-"этому модулю.\n"
-"    "
 
-#: bot/main.py:54
+#: bot/main.py:55
 #, python-brace-format
 msgid "Module {0} not found"
 msgstr "Модуль {0} не найден"
 
-#: bot/main.py:112
+#: bot/main.py:110
+msgid "pong"
+msgstr "понг"
+
+#: bot/main.py:116
 #, python-brace-format
 msgid "Language is set to: {0}"
 msgstr "Язык сменен на: {0}"
 
-#: bot/main.py:114
+#: bot/main.py:118
 #, python-brace-format
 msgid "Can't set language to: {0}"
 msgstr "Не могу изменить язык на: {0}"
+
+#~ msgid ""
+#~ "Available commands:\n"
+#~ "    {CMD_SIGN}{BOT_NAME} make bridge - creates a new bridge and returns a "
+#~ "secret code.\n"
+#~ "    {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to "
+#~ "another chat with specified secret code.\n"
+#~ "    {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.\n"
+#~ "\n"
+#~ "Available modules:\n"
+#~ "    show_image\n"
+#~ "Type {CMD_SIGN}{BOT_NAME} help [module name] to get help on a specific "
+#~ "module.\n"
+#~ "    "
+#~ msgstr ""
+#~ "Доступные команды:\n"
+#~ "    {CMD_SIGN}{BOT_NAME} make bridge - создает новый мост и возвращает "
+#~ "секретный код, который нужно указать в другом чате с помощью команды "
+#~ "{CMD_SIGN}{BOT_NAME} use bridge.\n"
+#~ "    {CMD_SIGN}{BOT_NAME} use bridge [секретный код] - попытка соединить "
+#~ "два чата.\n"
+#~ "    {CMD_SIGN}{BOT_NAME} set lang [язык] - изменить язык.\n"
+#~ "\n"
+#~ "Доступные модули:\n"
+#~ "    show_image\n"
+#~ "Введите {CMD_SIGN}{BOT_NAME} help [название модуля] для получения справки "
+#~ "по этому модулю.\n"
+#~ "    "
 
 #~ msgid "telesk"
 #~ msgstr "телеск"
