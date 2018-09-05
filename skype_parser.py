@@ -2,6 +2,10 @@ import queue
 from common import CommonMsg, bytes_to_object
 
 
+def escape_tags(text):
+    text = text.replace('<<<', '&lt;&lt;&lt;')
+    return text
+
 def parse_incoming_msg(sk_msg):
 
     def content_full(msg):
@@ -9,8 +13,8 @@ def parse_incoming_msg(sk_msg):
 
     msg = CommonMsg()
     msg.is_skype = True
-    if hasattr(sk_msg, 'plain'):
-        msg.content = sk_msg.plain
+    if hasattr(sk_msg, 'markup'):
+        msg.content = escape_tags(sk_msg.markup)
     msg.chat_id = sk_msg.chatId
     msg.user = {
             'id': sk_msg.user.id,

@@ -1,5 +1,13 @@
 from common import CommonMsg
 
+def parsed_message(msg):
+    if msg.reply_to_message:
+        text = "{quoted_text}".format(
+                quoted_text=msg.reply_to_message.text)
+        text += "\n<<< {0}".format(msg.text)
+        return text
+    else:
+        return msg.text
 
 def parse_incoming_msg(tele_msg, content_type='text', file_obj=None):
 
@@ -11,7 +19,7 @@ def parse_incoming_msg(tele_msg, content_type='text', file_obj=None):
     msg.user = {
             'id': tele_msg.from_user.id,
             'name': tele_msg.from_user.username}
-    msg.content = tele_msg.text
+    msg.content = parsed_message(tele_msg)
     msg.chat_id = str(tele_msg.chat.id)
 
     if content_type == 'photo':

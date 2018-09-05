@@ -71,6 +71,7 @@ def outgoing_handler():
             chat_id = outgoing['bridge'].telegram_id
         if chat_id:
             if outgoing['msg'].content_full:
+                print(outgoing['msg'].content_full)
                 bot.send_message(
                         chat_id,
                         outgoing['msg'].content_full,
