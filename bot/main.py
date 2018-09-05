@@ -1,6 +1,12 @@
 import secrets
 import configparser
-from common import CommonMsg, init_loc
+from common import (
+        CommonMsg,
+        init_loc,
+        get_aliases,
+        set_aliases,
+        set_help
+        )
 from models import Bridge
 from bot.show_image import show_image
 
@@ -37,12 +43,12 @@ def cmd_help(cmd):
     {CMD_SIGN}{BOT_NAME} use bridge [secret code] - tries to connect to another chat with \
 specified secret code.
     {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.
-    {CMD_SIGN}{BOT_NAME} ping - ping? pong!
+    {CMD_SIGN}{BOT_NAME} ping - {ping_help}
 
 Available modules:
     show_image
 Type {CMD_SIGN}{BOT_NAME} help [module name] to get help on a specific module.
-    """).format(CMD_SIGN=CMD_SIGN, BOT_NAME=BOT_NAME)
+    """).format(CMD_SIGN=CMD_SIGN, BOT_NAME=BOT_NAME, ping_help=ping.help)
     return result
 
 def module_help(cmd):
@@ -105,9 +111,12 @@ Example: {CMD_SIGN}{BOT_NAME} use bridge 1234abcd"""
                     skype_id = BRIDGE['skype_id'])
             return 'The connection is established successfully'
 
-
+s = "ping? pong!"
+@set_aliases(get_aliases('ping'))
+@set_help(s)
 def ping():
     return _('pong')
+
 
 def set_lang(cmd):
     lang = cmd.split('set lang')[1].strip().lower()
@@ -117,6 +126,7 @@ def set_lang(cmd):
     except:
         return _("Can't set language to: {0}").format(lang)
 
+
 def bot(msg):
     r = None
     if msg.content.startswith(f'{CMD_SIGN}{BOT_NAME}'):
@@ -124,7 +134,7 @@ def bot(msg):
         if cmd == 'help': r = cmd_help(cmd)
         elif cmd.startswith('help'): r = module_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
-        elif cmd == 'ping': r = ping()
+        elif cmd in ping.aliases: r = ping()
         elif cmd.startswith('use bridge'): r = use_bridge(cmd, msg)
         elif cmd.startswith('set lang'): r = set_lang(cmd)
         else:

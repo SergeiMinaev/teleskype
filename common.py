@@ -4,12 +4,10 @@ import configparser
 from io import BytesIO
 from os import path
 
-
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 incoming_msg_queue = queue.Queue()
-
 
 class CommonMsg():
     is_skype = False
@@ -49,3 +47,31 @@ def init_loc(user_lang = None):
         lang = config['main']['lang']
     loc = gettext.translation('messages', localedir='./locale', languages=[lang])
     loc.install()
+
+
+def set_aliases(aliases_tuple):
+    """ Function decorator to add 'aliases' attribute to bot's commands """
+    def wrapper(f):
+        f.aliases = (aliases_tuple)
+        return f
+    return wrapper
+
+
+def get_aliases(cmd_name):
+    """
+    Returns command aliases (tuple) from config.ini.
+    In case of failure returns cmd_name.
+    """
+    try:
+        return eval("%s" % config['bot_cmd_aliases'][cmd_name])
+    except:
+        return (cmd_name,)
+
+def set_help(s):
+    def wrapper(f):
+        f.help = _(s)
+        return f
+    return wrapper
+
+
+init_loc()

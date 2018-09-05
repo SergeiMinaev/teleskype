@@ -7,6 +7,9 @@ lang = en
 name = bot
 cmd_without_dash = no
 
+[bot_cmd_aliases]
+ping = ('ping', 'say pong')
+
 [proxy]
 proxy_type = socks5
 login = login

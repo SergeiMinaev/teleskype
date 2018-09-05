@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-05 19:21+0300\n"
+"POT-Creation-Date: 2018-09-05 23:01+0300\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: bot/main.py:35
+#: bot/main.py:41
 #, python-brace-format
 msgid ""
 "Available commands:\n"
@@ -20,6 +20,7 @@ msgid ""
 "another chat with specified secret code.\n"
 "    {CMD_SIGN}{BOT_NAME} set lang [lang] - change language.\n"
 "    {CMD_SIGN}{BOT_NAME} ping - ping? pong!\n"
+"    {CMD_SIGN}{BOT_NAME} {ping_help}\n"
 "\n"
 "Available modules:\n"
 "    show_image\n"
@@ -28,21 +29,21 @@ msgid ""
 "    "
 msgstr ""
 
-#: bot/main.py:55
+#: bot/main.py:62
 #, python-brace-format
 msgid "Module {0} not found"
 msgstr ""
 
-#: bot/main.py:110
+#: bot/main.py:119
 msgid "pong"
 msgstr ""
 
-#: bot/main.py:116
+#: bot/main.py:126
 #, python-brace-format
 msgid "Language is set to: {0}"
 msgstr ""
 
-#: bot/main.py:118
+#: bot/main.py:128
 #, python-brace-format
 msgid "Can't set language to: {0}"
 msgstr ""
