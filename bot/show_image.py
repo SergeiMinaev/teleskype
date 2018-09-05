@@ -2,7 +2,7 @@ import configparser
 import random
 import os
 from ast import literal_eval
-from common import doc
+from common import doc, set_help
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -25,6 +25,17 @@ def aliases_as_string():
 
 
 aliases_string = aliases_as_string()
+s = _("""
+Shows random image by specified keyword.
+Available keywords:
+    {aliases_string}
+Example usage:
+    {CMD_SIGN}{BOT_NAME} {first_aliase}""").format(
+        aliases_string=aliases_string,
+        first_aliase=aliases_string.split()[0],
+        CMD_SIGN=CMD_SIGN,
+        BOT_NAME=BOT_NAME)
+@set_help(s)
 @doc(f"""
     Shows random image by specified keyword. Available keywords:
         {aliases_string}

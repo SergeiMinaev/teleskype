@@ -60,14 +60,14 @@ def module_help(cmd):
     except:
         return _("Module {0} not found").format(module_name)
     if bot_module:
-        doc_string = bot_module.__doc__.strip()
+        doc_string = bot_module.help.strip()
     if not doc_string:
         result = f"Module {module_name} doesn't have a documentation"
     else:
         result = f"""
-        {module_name} help:
-        {doc_string}
-        """
+{module_name} help:
+{doc_string}
+"""
     return result
 
 def make_bridge(msg):
