@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import signal
 import sys
+import os
 from threading import Thread
 import telegram_connector
 import skype_connector
@@ -19,10 +20,17 @@ def init_db():
     db.create_tables([Bridge])
 
 
+def save_pid():
+    mypid = os.getpid()
+    f = open('pid.txt', 'w')
+    f.write(str(mypid))
+    f.close()
+
 
 signal.signal(signal.SIGINT, ctrl_c_handler)
 init_db()
 init_loc()
+save_pid()
 
 skype_thread = Thread(target = skype_connector.run).start()
 telegram_thread = Thread(target = telegram_connector.run).start()
