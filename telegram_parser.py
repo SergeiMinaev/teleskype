@@ -9,6 +9,14 @@ def parsed_message(msg):
     else:
         return msg.text
 
+def parsed_name(msg):
+    if msg.from_user.username:
+        return msg.from_user.username
+    elif msg.from_user.firstname and msg.from_user.lastname:
+        return f'{msg.from_user.firstname} {msg.from_user.lastname}'
+    else:
+        return msg.from_user.id
+
 def parse_incoming_msg(tele_msg, content_type='text', file_obj=None):
 
     def content_full(msg):
@@ -18,7 +26,7 @@ def parse_incoming_msg(tele_msg, content_type='text', file_obj=None):
     msg.is_telegram = True
     msg.user = {
             'id': tele_msg.from_user.id,
-            'name': tele_msg.from_user.username}
+            'name': parsed_name(tele_msg)}
     msg.content = parsed_message(tele_msg)
     msg.chat_id = str(tele_msg.chat.id)
 
