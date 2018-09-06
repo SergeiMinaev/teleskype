@@ -86,10 +86,21 @@ def outgoing_handler():
                             chat_id,
                             outgoing['msg'].file_obj['obj'])
 
+def status_checker():
+    while True:
+        f = open("telegram_status.txt", "w")
+        me = bot.get_me()
+        if me:
+            f.write('ok')
+        else:
+            f.write('error')
+        f.close()
+        sleep(30)
 
 
 def run():
     outgoing_thread = Thread(target = outgoing_handler).start()
+    status_thread = Thread(target = status_checker).start()
     while True:
         try:
             print("Telegram connector is running")

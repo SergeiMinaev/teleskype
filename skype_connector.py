@@ -72,6 +72,17 @@ def outgoing_handler(sk):
                             image = False)
 
 
+def status_checker(sk):
+    while True:
+        ok = sk.conn.connected
+        f = open('skype_status.txt', 'w')
+        if ok:
+            f.write('ok')
+        else:
+            f.write('error')
+        f.close()
+        sleep(30)
+
 
 def loop(sk):
     sk.loop()
@@ -92,4 +103,5 @@ def run():
 
     loop_thread = Thread(target = loop, args=(sk,)).start()
     outgoing_thread = Thread(target = outgoing_handler, args=(sk,)).start()
+    status_thread = Thread(target = status_checker, args=(sk,)).start()
     check_token_loop(sk.conn)
