@@ -97,25 +97,31 @@ def outgoing_handler():
                             chat_id,
                             outgoing['msg'].file_obj['obj'])
 
+
 def status_checker():
     while True:
-        f = open("telegram_status.txt", "w")
-        me = bot.get_me()
-        if me:
-            f.write('ok')
-        else:
-            f.write('error')
-        f.close()
-        sleep(30)
+        try:
+            me = bot.get_me()
+            set_connection_status('ok')
+        except:
+            set_connection_status('error')
+        sleep(15)
+
+
+def set_connection_status(status):
+    f = open("telegram_status.txt", "w")
+    f.write(status)
+    f.close()
 
 
 def run():
     outgoing_thread = Thread(target = outgoing_handler).start()
-    status_thread = Thread(target = status_checker).start()
     while True:
         try:
-            print("Telegram connector is running")
+            sleep(3)
+            print('>>>> Telegram connector is running')
+            status_thread = Thread(target = status_checker).start()
             bot.polling(none_stop=True, timeout=5)
         except Exception as e:
-            print('telegram connector error:', repr(e))
-            sleep(3)
+            print('>>>> Telegram connector error:', repr(e))
+            set_connection_status('error')
