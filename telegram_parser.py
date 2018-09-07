@@ -31,10 +31,15 @@ def parse_incoming_msg(tele_msg, content_type='text', file_obj=None):
     msg.chat_id = str(tele_msg.chat.id)
 
     if content_type == 'photo':
-        print(file_obj)
         msg.content = 'Image.jpg:'
         msg.file_obj = {
                 'name': 'Image.jpg',
+                'obj': file_obj}
+
+    if content_type == 'video':
+        msg.content = f'{file_obj.name}:'
+        msg.file_obj = {
+                'name': file_obj.name,
                 'obj': file_obj}
 
     msg.content_full = content_full(msg)

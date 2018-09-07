@@ -60,6 +60,17 @@ def sticker_handler(message):
     incoming_msg_queue.put(message)
 
 
+@bot.message_handler(content_types=['video'])
+def video_handler(message):
+    file_id= bot.get_file(message.video.file_id)
+    file_name = file_id.file_path.split('/')[-1]
+    file_content = bot.download_file(file_id.file_path)
+    file_obj = bytes_to_object(file_content, file_name)
+    file_obj.name = file_name
+    message = parse_incoming_msg(message, content_type='video', file_obj=file_obj)
+    incoming_msg_queue.put(message)
+
+
 def outgoing_handler():
     while True:
         outgoing = outgoing_tele_msg_queue.get()
