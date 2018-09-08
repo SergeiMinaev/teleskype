@@ -12,6 +12,8 @@ def parsed_message(msg):
 def parsed_name(msg):
     if msg.from_user.first_name and msg.from_user.last_name:
         return f'{msg.from_user.first_name} {msg.from_user.last_name}'
+    elif msg.from_user.first_name:
+        return f'{msg.from_user.first_name}'
     elif msg.from_user.username:
         return msg.from_user.username
     else:
