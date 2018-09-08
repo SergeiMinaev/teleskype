@@ -1,7 +1,8 @@
 import configparser
 import os
-from threading import Thread, Timer
 import queue
+import uuid
+from threading import Thread, Timer
 from datetime import datetime
 from time import sleep
 from skpy import Skype, SkypeAuthException, SkypeEventLoop
@@ -74,14 +75,17 @@ def outgoing_handler(sk):
 
 def status_checker(sk):
     while True:
-        ok = sk.conn.connected
+        mood = uuid.uuid4().hex.upper()[0:6]
+        status = 'error'
+        try:
+            sk.setMood(mood)
+            status = 'ok'
+        except:
+            pass
         f = open('skype_status.txt', 'w')
-        if ok:
-            f.write('ok')
-        else:
-            f.write('error')
+        f.write(status)
         f.close()
-        sleep(30)
+        sleep(15)
 
 
 def loop(sk):
