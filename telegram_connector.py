@@ -71,6 +71,17 @@ def video_handler(message):
     incoming_msg_queue.put(message)
 
 
+@bot.message_handler(content_types=['document'])
+def document_handler(message):
+    file_id= bot.get_file(message.document.file_id)
+    file_name = file_id.file_path.split('/')[-1]
+    file_content = bot.download_file(file_id.file_path)
+    file_obj = bytes_to_object(file_content, file_name)
+    file_obj.name = file_name
+    message = parse_incoming_msg(message, content_type='document', file_obj=file_obj)
+    incoming_msg_queue.put(message)
+
+
 def outgoing_handler():
     while True:
         outgoing = outgoing_tele_msg_queue.get()
@@ -118,10 +129,10 @@ def run():
     outgoing_thread = Thread(target = outgoing_handler).start()
     while True:
         try:
-            sleep(3)
             print('>>>> Telegram connector is running')
             status_thread = Thread(target = status_checker).start()
             bot.polling(none_stop=True, timeout=5)
         except Exception as e:
             print('>>>> Telegram connector error:', repr(e))
             set_connection_status('error')
+            sleep(3)

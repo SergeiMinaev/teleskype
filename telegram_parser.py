@@ -44,5 +44,11 @@ def parse_incoming_msg(tele_msg, content_type='text', file_obj=None):
                 'name': file_obj.name,
                 'obj': file_obj}
 
+    if content_type == 'document':
+        msg.content = f'{file_obj.name}:'
+        msg.file_obj = {
+                'name': file_obj.name,
+                'obj': file_obj}
+
     msg.content_full = content_full(msg)
     return msg
