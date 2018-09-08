@@ -7,8 +7,15 @@ Keep this script in main teleskype's directory.
 import os
 import subprocess
 import signal
+import configparser
 from time import sleep
 from datetime import datetime
+
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+python_path = config['main']['python_path']
+
 
 def check_pid(pid):
     try:

@@ -2,6 +2,7 @@
 telegram_token = TOKEN
 use_proxy = no
 lang = en
+python_path = /path/to/teleskype/virtualenv/bin/python
 
 [bot]
 name = bot
