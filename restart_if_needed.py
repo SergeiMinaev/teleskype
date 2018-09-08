@@ -12,6 +12,7 @@ from time import sleep
 from datetime import datetime
 
 
+os.chdir(os.path.dirname(__file__))
 config = configparser.ConfigParser()
 config.read('config.ini')
 python_path = config['main']['python_path']
@@ -53,7 +54,6 @@ def is_need_restart():
 
 def restart():
     print('Trying to restart teleskype')
-    os.chdir(os.path.dirname(__file__))
     bot_pid = get_bot_pid()
 
     if bot_pid:
