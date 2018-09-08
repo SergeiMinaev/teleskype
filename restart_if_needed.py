@@ -71,7 +71,7 @@ def restart():
 
         if not check_pid(bot_pid):
             print("Starting teleskype")
-            subprocess.Popen(["nohup", "./teleskype.py"],
+            subprocess.Popen(["nohup", python_path, "teleskype.py"],
                      stdout=open('/dev/null', 'w'),
                      stderr=open('logfile.log', 'a'),
                      preexec_fn=os.setpgrp)
