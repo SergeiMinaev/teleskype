@@ -2,6 +2,7 @@ import configparser
 import os
 import queue
 import uuid
+import logging
 from threading import Thread, Timer
 from datetime import datetime
 from time import sleep
@@ -36,10 +37,10 @@ def check_token_loop(conn):
         try:
             conn.refreshSkypeToken()
         except SkypeAuthException as e:
-            print("Can't refresh skype token. Login request is rejected",
+            logging.error("Can't refresh skype token. Login request is rejected",
                     repr(e))
         except SkypeApiException as e:
-            print("Can't refresh skype token. Login form can't be processed",
+            logging.error("Can't refresh skype token. Login form can't be processed",
                     repr(e))
         else:
             print("Skype token has been refreshed successfully")
@@ -59,7 +60,6 @@ def outgoing_handler(sk):
             if outgoing['msg'].content_full:
                 chat.sendMsg(outgoing['msg'].content_full)
             if outgoing['msg'].file_obj['obj']:
-                print('going to send file')
                 if is_image(outgoing['msg'].file_obj['name']):
                     outgoing['msg'].file_obj['obj'].seek(0)
                     chat.sendFile(

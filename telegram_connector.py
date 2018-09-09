@@ -1,6 +1,7 @@
 import configparser
 import queue
 import telebot
+import logging
 from io import BytesIO
 from PIL import Image
 from threading import Thread
@@ -129,10 +130,10 @@ def run():
     outgoing_thread = Thread(target = outgoing_handler).start()
     while True:
         try:
-            print('>>>> Telegram connector is running')
+            print('Telegram connector is running')
             status_thread = Thread(target = status_checker).start()
             bot.polling(none_stop=True, timeout=5)
         except Exception as e:
-            print('>>>> Telegram connector error:', repr(e))
+            logging.error('Telegram connector error:', repr(e))
             set_connection_status('error')
             sleep(3)
