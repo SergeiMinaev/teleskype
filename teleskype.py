@@ -2,6 +2,7 @@
 import signal
 import sys
 import os
+import logging
 from threading import Thread
 import telegram_connector
 import skype_connector
@@ -20,6 +21,13 @@ def init_db():
     db.create_tables([Bridge])
 
 
+def init_logging():
+    logging.basicConfig(
+            filename="teleskype.log",
+            filemode="w",
+            format='%(asctime)s %(message)s')
+
+
 def save_pid():
     mypid = os.getpid()
     f = open('pid.txt', 'w')
@@ -30,6 +38,7 @@ def save_pid():
 signal.signal(signal.SIGINT, ctrl_c_handler)
 init_db()
 init_loc()
+init_logging()
 save_pid()
 
 skype_thread = Thread(target = skype_connector.run).start()
