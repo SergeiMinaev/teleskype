@@ -9,6 +9,7 @@ from common import (
         )
 from models import Bridge
 from bot.show_image import show_image
+from bot.cbr_currency import cbr_currency
 
 
 config = configparser.ConfigParser()
@@ -137,6 +138,7 @@ def bot(msg):
         elif cmd in ping.aliases: r = ping()
         elif cmd.startswith('use bridge'): r = use_bridge(cmd, msg)
         elif cmd.startswith('set lang'): r = set_lang(cmd)
+        elif cmd.startswith(cbr_currency.aliases): r = cbr_currency(cmd)
         else:
             r = show_image(cmd)
         if r:

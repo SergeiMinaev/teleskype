@@ -7,21 +7,39 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-10 23:27+0300\n"
+"POT-Creation-Date: 2018-09-11 01:09+0300\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: bot/cbr_currency.py:15
+#: bot/cbr_currency.py:30
 #, python-brace-format
 msgid ""
-"\n"
 "Returns currency rates from Central Bank of Russia (cbr.ru)\n"
 "Available currencies:\n"
-"    USD, EUR\n"
+"    {currencies}\n"
 "Example usage:\n"
-"    {CMD_SIGN}{BOT_NAME} {first_aliase} USD"
+"    {CMD_SIGN}{BOT_NAME} {first_aliase} USD\n"
+"    {CMD_SIGN}{BOT_NAME} {first_aliase} usd"
 msgstr ""
 
-#: bot/main.py:41
+#: bot/cbr_currency.py:54
+msgid "Exchange rate of "
+msgstr ""
+
+#: bot/cbr_currency.py:61
+#, python-brace-format
+msgid ""
+"{msg} {char_code}:\n"
+"    {nominal} {name} - {value} RUB"
+msgstr ""
+
+#: bot/cbr_currency.py:65
+#, python-brace-format
+msgid ""
+"Unknown currency. Available currencies:\n"
+"        {currencies}"
+msgstr ""
+
+#: bot/main.py:42
 #, python-brace-format
 msgid ""
 "Available commands:\n"
@@ -39,25 +57,25 @@ msgid ""
 "    "
 msgstr ""
 
-#: bot/main.py:61
+#: bot/main.py:62
 #, python-brace-format
 msgid "Module {0} not found"
 msgstr ""
 
-#: bot/main.py:114
+#: bot/main.py:115
 msgid "ping? pong!"
 msgstr ""
 
-#: bot/main.py:118
+#: bot/main.py:119
 msgid "pong"
 msgstr ""
 
-#: bot/main.py:125
+#: bot/main.py:126
 #, python-brace-format
 msgid "Language is set to: {0}"
 msgstr ""
 
-#: bot/main.py:127
+#: bot/main.py:128
 #, python-brace-format
 msgid "Can't set language to: {0}"
 msgstr ""
