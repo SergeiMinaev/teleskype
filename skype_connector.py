@@ -48,29 +48,41 @@ def check_token_loop(conn):
 
 def outgoing_handler(sk):
     while True:
-        outgoing = outgoing_sk_msg_queue.get()
-        if outgoing == None: break
-        chat_id = None
-        if not outgoing['bridge']: # direct message
-            chat_id = outgoing['msg'].chat_id
-        elif outgoing['msg'].is_telegram: # forwarded message from telegram to skype
-            chat_id = outgoing['bridge'].skype_id
-        if chat_id:
-            chat = sk.chats.chat(chat_id)
-            if outgoing['msg'].content_full:
-                chat.sendMsg(outgoing['msg'].content_full)
-            if outgoing['msg'].file_obj['obj']:
-                if is_image(outgoing['msg'].file_obj['name']):
-                    outgoing['msg'].file_obj['obj'].seek(0)
-                    chat.sendFile(
-                            outgoing['msg'].file_obj['obj'],
-                            outgoing['msg'].file_obj['name'],
-                            image = True)
-                else:
-                    chat.sendFile(
-                            outgoing['msg'].file_obj['obj'],
-                            outgoing['msg'].file_obj['name'],
-                            image = False)
+        try:
+            outgoing = outgoing_sk_msg_queue.get()
+            if outgoing == None: break
+            chat_id = None
+            if not outgoing['bridge']: # direct message
+                chat_id = outgoing['msg'].chat_id
+            elif outgoing['msg'].is_telegram: # forwarded message from telegram to skype
+                chat_id = outgoing['bridge'].skype_id
+            if chat_id:
+                chat = sk.chats.chat(chat_id)
+                if outgoing['msg'].content_full:
+                    chat.sendMsg(outgoing['msg'].content_full)
+                if outgoing['msg'].file_obj['obj']:
+                    if is_image(outgoing['msg'].file_obj['name']):
+                        outgoing['msg'].file_obj['obj'].seek(0)
+                        chat.sendFile(
+                                outgoing['msg'].file_obj['obj'],
+                                outgoing['msg'].file_obj['name'],
+                                image = True)
+                    else:
+                        chat.sendFile(
+                                outgoing['msg'].file_obj['obj'],
+                                outgoing['msg'].file_obj['name'],
+                                image = False)
+            set_status('ok')
+        except Exception as e:
+            logging.error("Skype outgoing handler error:", repr(e))
+            set_status('error')
+            sleep(2)
+
+
+def set_status(status):
+    f = open('skype_status.txt', 'w')
+    f.write(status)
+    f.close()
 
 
 def status_checker(sk):
@@ -82,9 +94,7 @@ def status_checker(sk):
             status = 'ok'
         except:
             pass
-        f = open('skype_status.txt', 'w')
-        f.write(status)
-        f.close()
+        set_status(status)
         sleep(15)
 
 
