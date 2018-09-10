@@ -7,8 +7,19 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 01:28+0300\n"
+"POT-Creation-Date: 2018-09-10 23:27+0300\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+#: bot/cbr_currency.py:15
+#, python-brace-format
+msgid ""
+"\n"
+"Returns currency rates from Central Bank of Russia (cbr.ru)\n"
+"Available currencies:\n"
+"    USD, EUR\n"
+"Example usage:\n"
+"    {CMD_SIGN}{BOT_NAME} {first_aliase} USD"
+msgstr ""
 
 #: bot/main.py:41
 #, python-brace-format
@@ -31,6 +42,10 @@ msgstr ""
 #: bot/main.py:61
 #, python-brace-format
 msgid "Module {0} not found"
+msgstr ""
+
+#: bot/main.py:114
+msgid "ping? pong!"
 msgstr ""
 
 #: bot/main.py:118

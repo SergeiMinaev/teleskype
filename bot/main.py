@@ -36,7 +36,7 @@ def make_msg(response, inc_msg):
         msg.content_full = f'[{BOT_NAME}] {response}'
     return msg
 
-
+@set_aliases(get_aliases('help'))
 def cmd_help(cmd):
     result = _("""Available commands:
     {CMD_SIGN}{BOT_NAME} make bridge - creates a new bridge and returns a secret code.
@@ -111,7 +111,7 @@ Example: {CMD_SIGN}{BOT_NAME} use bridge 1234abcd"""
                     skype_id = BRIDGE['skype_id'])
             return 'The connection is established successfully'
 
-s = "ping? pong!"
+s = _("ping? pong!")
 @set_aliases(get_aliases('ping'))
 @set_help(s)
 def ping():
@@ -131,7 +131,7 @@ def bot(msg):
     r = None
     if msg.content.lower().startswith(f'{CMD_SIGN}{BOT_NAME} '):
         cmd = msg.content.lower().split(f'{BOT_NAME} ')[1].strip()
-        if cmd == 'help': r = cmd_help(cmd)
+        if cmd in cmd_help.aliases: r = cmd_help(cmd)
         elif cmd.startswith('help'): r = module_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
         elif cmd in ping.aliases: r = ping()
