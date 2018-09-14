@@ -5,6 +5,7 @@ Checks teleskype's connection status. Restart teleskype if status is not online.
 Keep this script in main teleskype's directory.
 """
 import os
+import sys
 import subprocess
 import signal
 import configparser
@@ -38,6 +39,8 @@ def get_bot_pid():
 
 
 def is_need_restart():
+    if '--force-restart' in sys.argv:
+        return True
     telegram_status = open('telegram_status.txt').read()
     skype_status = open('skype_status.txt').read()
     telegram_mtime = os.path.getmtime('telegram_status.txt')
