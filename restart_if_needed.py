@@ -41,15 +41,19 @@ def get_bot_pid():
 def is_need_restart():
     if '--force-restart' in sys.argv:
         return True
-    telegram_status = open('telegram_status.txt').read()
-    skype_status = open('skype_status.txt').read()
+    f = open('telegram_status.txt', 'r')
+    telegram_status = f.read()
+    f.close()
+    f = open('skype_status.txt', 'r')
+    skype_status = f.read()
+    f.close()
     telegram_mtime = os.path.getmtime('telegram_status.txt')
     skype_mtime = os.path.getmtime('skype_status.txt')
     now = datetime.now().timestamp()
     if now - telegram_mtime > 60 or now - skype_mtime > 60:
         print('Something goes wrong: status files were updated too long ago.')
         return True
-    if telegram_status == 'error' or skype_status == 'error':
+    if 'error' in telegram_status or 'error' in skype_status:
         print('Something goes wrong: some of status files contain error message.')
         return True
     return False
