@@ -7,8 +7,23 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-11 01:09+0300\n"
+"POT-Creation-Date: 2018-10-16 02:52+0300\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+#: bot/stats.py:20
+#, python-brace-format
+msgid ""
+"Stores users and messages. Show statistics.\n"
+"Example usage:\n"
+"    {CMD_SIGN}{BOT_NAME} {first_aliase}"
+msgstr ""
+
+#: bot/stats.py:31
+#, python-brace-format
+msgid ""
+"Total number of messages:\n"
+"    {msg_count}"
+msgstr ""
 
 #: bot/cbr_currency.py:30
 #, python-brace-format
@@ -39,7 +54,7 @@ msgid ""
 "        {currencies}"
 msgstr ""
 
-#: bot/main.py:42
+#: bot/main.py:43
 #, python-brace-format
 msgid ""
 "Available commands:\n"
@@ -57,25 +72,25 @@ msgid ""
 "    "
 msgstr ""
 
-#: bot/main.py:62
+#: bot/main.py:63
 #, python-brace-format
 msgid "Module {0} not found"
 msgstr ""
 
-#: bot/main.py:115
+#: bot/main.py:116
 msgid "ping? pong!"
 msgstr ""
 
-#: bot/main.py:119
+#: bot/main.py:120
 msgid "pong"
 msgstr ""
 
-#: bot/main.py:126
+#: bot/main.py:127
 #, python-brace-format
 msgid "Language is set to: {0}"
 msgstr ""
 
-#: bot/main.py:128
+#: bot/main.py:129
 #, python-brace-format
 msgid "Can't set language to: {0}"
 msgstr ""

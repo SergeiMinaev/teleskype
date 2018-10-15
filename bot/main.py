@@ -10,6 +10,7 @@ from common import (
 from models import Bridge
 from bot.show_image import show_image
 from bot.cbr_currency import cbr_currency
+from bot.stats import stats, write_stats
 
 
 config = configparser.ConfigParser()
@@ -130,6 +131,9 @@ def set_lang(cmd):
 
 def bot(msg):
     r = None
+
+    write_stats(msg)
+
     if msg.content.lower().startswith(f'{CMD_SIGN}{BOT_NAME} '):
         cmd = msg.content.lower().split(f'{BOT_NAME} ')[1].strip()
         if cmd in cmd_help.aliases: r = cmd_help(cmd)
@@ -139,6 +143,7 @@ def bot(msg):
         elif cmd.startswith('use bridge'): r = use_bridge(cmd, msg)
         elif cmd.startswith('set lang'): r = set_lang(cmd)
         elif cmd.startswith(cbr_currency.aliases): r = cbr_currency(cmd)
+        elif cmd.startswith(stats.aliases): r = stats(cmd)
         else:
             r = show_image(cmd)
         if r:
