@@ -1,4 +1,33 @@
-from common import CommonMsg
+from common import CommonMsg, bytes_to_object
+from telegram_common import bot
+
+
+def file_obj_from_msg(msg):
+    if msg.content_type == 'photo':
+        photo_file = bot.get_file(msg.photo[len(msg.photo)-1].file_id)
+        photo_content = bot.download_file(photo_file.file_path)
+        file_obj = bytes_to_object(photo_content, photo_file.file_path.split('/')[-1])
+    elif msg.content_type == 'sticker':
+        photo_file = bot.get_file(msg.sticker.file_id)
+        photo_content = bot.download_file(photo_file.file_path)
+        filename = photo_file.file_path.split('/')[-1]
+        tmp_file_obj = bytes_to_object(photo_content, filename)
+        file_obj = BytesIO()
+        im = Image.open(tmp_file_obj).convert('RGBA')
+        im.save(file_obj, format='PNG')
+        tmp_file_obj.close()
+        file_obj.seek(0)
+    elif msg.content_type == 'video' or msg.content_type == 'document':
+        if msg.content_type == 'video':
+            file_id = bot.get_file(msg.video.file_id)
+        else:
+            file_id = bot.get_file(msg.document.file_id)
+        file_name = file_id.file_path.split('/')[-1]
+        file_content = bot.download_file(file_id.file_path)
+        file_obj = bytes_to_object(file_content, file_name)
+        file_obj.name = file_name
+    return file_obj
+
 
 
 def parsed_message(msg):
@@ -20,7 +49,7 @@ def parsed_name(msg):
     else:
         return msg.from_user.id
 
-def parse_incoming_msg(tele_msg, file_obj=None):
+def parse_incoming_msg(tele_msg):
 
     def content_full(msg):
         return  f"[{msg.user['name']}] {msg.content}"
@@ -34,10 +63,12 @@ def parse_incoming_msg(tele_msg, file_obj=None):
     msg.chat_id = str(tele_msg.chat.id)
 
     if tele_msg.content_type != 'text':
+        file_obj = file_obj_from_msg(tele_msg)
         msg.content = f'{file_obj.name}:'
         msg.file_obj = {
                 'name': file_obj.name,
                 'obj': file_obj}
 
     msg.content_full = content_full(msg)
+
     return msg
