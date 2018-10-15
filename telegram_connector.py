@@ -29,10 +29,8 @@ def send_welcome(message):
     bot.reply_to(message, "Hello!")
 
 
-# Handle all messages with content_type 'text'
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
-    #bot.reply_to(message, message.text)
     message = parse_incoming_msg(message)
     incoming_msg_queue.put(message)
 
@@ -42,7 +40,7 @@ def photo_handler(message):
     photo_file = bot.get_file(message.photo[len(message.photo)-1].file_id)
     photo_content = bot.download_file(photo_file.file_path)
     file_obj = bytes_to_object(photo_content, photo_file.file_path.split('/')[-1])
-    message = parse_incoming_msg(message, content_type='photo', file_obj=file_obj)
+    message = parse_incoming_msg(message, file_obj=file_obj)
     incoming_msg_queue.put(message)
 
 
@@ -57,7 +55,7 @@ def sticker_handler(message):
     im.save(png_obj, format='PNG')
     file_obj.close()
     png_obj.seek(0)
-    message = parse_incoming_msg(message, content_type='photo', file_obj=png_obj)
+    message = parse_incoming_msg(message, file_obj=png_obj)
     incoming_msg_queue.put(message)
 
 
@@ -68,7 +66,7 @@ def video_handler(message):
     file_content = bot.download_file(file_id.file_path)
     file_obj = bytes_to_object(file_content, file_name)
     file_obj.name = file_name
-    message = parse_incoming_msg(message, content_type='video', file_obj=file_obj)
+    message = parse_incoming_msg(message, file_obj=file_obj)
     incoming_msg_queue.put(message)
 
 
@@ -79,7 +77,7 @@ def document_handler(message):
     file_content = bot.download_file(file_id.file_path)
     file_obj = bytes_to_object(file_content, file_name)
     file_obj.name = file_name
-    message = parse_incoming_msg(message, content_type='document', file_obj=file_obj)
+    message = parse_incoming_msg(message, file_obj=file_obj)
     incoming_msg_queue.put(message)
 
 
