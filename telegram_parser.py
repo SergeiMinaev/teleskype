@@ -33,19 +33,7 @@ def parse_incoming_msg(tele_msg, file_obj=None):
     msg.content = parsed_message(tele_msg)
     msg.chat_id = str(tele_msg.chat.id)
 
-    if tele_msg.content_type == 'photo':
-        msg.content = f'{file_obj.name}:'
-        msg.file_obj = {
-                'name': 'Image.jpg',
-                'obj': file_obj}
-
-    if tele_msg.content_type == 'video':
-        msg.content = f'{file_obj.name}:'
-        msg.file_obj = {
-                'name': file_obj.name,
-                'obj': file_obj}
-
-    if tele_msg.content_type == 'document':
+    if tele_msg.content_type != 'text':
         msg.content = f'{file_obj.name}:'
         msg.file_obj = {
                 'name': file_obj.name,
