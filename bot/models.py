@@ -8,7 +8,7 @@ class BaseModel(Model):
         database = db
 
 class User(BaseModel):
-    id = CharField(max_length=300, unique=True)
+    user_id = CharField(max_length=300, unique=True)
     is_telegram = BooleanField()
     username = CharField(max_length=300)
 

@@ -37,18 +37,17 @@ def write_stats(msg):
     if msg.content:
         db.connect(reuse_if_open=True)
         db.create_tables([User, Message])
-        user_q = User.select().where(User.id == msg.user['id'])
+        user_q = User.select().where(User.user_id == msg.user['id'])
         users = [user for user in user_q]
         if len(users) == 0:
             is_telegram = True if msg.is_telegram else False
             user = User.create(
-                    id=msg.user['id'],
+                    user_id=msg.user['id'],
                     is_telegram=is_telegram,
                     username=msg.user['name'])
             user.save()
         else:
             user = users[0]
-
         msg = Message.create(
                 user=user,
                 message=msg.content,

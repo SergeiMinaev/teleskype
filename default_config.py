@@ -10,6 +10,9 @@ cmd_without_dash = no
 
 [bot_cmd_aliases]
 ping = ('ping', 'say pong')
+help = ('help',)
+cbr_currency = ('currency',)
+stats = ('stats',)
 
 [proxy]
 proxy_type = socks5
