@@ -1,3 +1,4 @@
+import random
 from peewee import *
 from bot.models import db, User, Message
 from common import (
@@ -53,3 +54,7 @@ def write_stats(msg):
                 message=msg.content,
                 timestamp=round(datetime.now().timestamp()))
         msg.save()
+
+def say_random():
+    msg = Message.select()[random.randrange(0, Message.select().count())]
+    return msg.message

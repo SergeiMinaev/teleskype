@@ -1,5 +1,6 @@
 import secrets
 import configparser
+import random
 from common import (
         CommonMsg,
         init_loc,
@@ -10,7 +11,7 @@ from common import (
 from models import Bridge
 from bot.show_image import show_image
 from bot.cbr_currency import cbr_currency
-from bot.stats import stats, write_stats
+from bot.stats import stats, write_stats, say_random
 
 
 config = configparser.ConfigParser()
@@ -145,7 +146,7 @@ def bot(msg):
         elif cmd.startswith(cbr_currency.aliases): r = cbr_currency(cmd)
         elif cmd.startswith(stats.aliases): r = stats(cmd)
         else:
-            r = show_image(cmd)
+            r = show_image(cmd) if random.randint(0, 1) == 1 else say_random()
         if r:
             r = make_msg(r, msg)
     return r
