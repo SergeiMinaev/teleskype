@@ -56,5 +56,11 @@ def write_stats(msg):
         msg.save()
 
 def say_random():
-    msg = Message.select()[random.randrange(0, Message.select().count())]
+    msg = ""
+    n = 0
+    while n < 3:
+        msg = Message.select()[random.randrange(0, Message.select().count())]
+        n += 1
+        if len(msg.message) < 100:
+            break
     return msg.message
