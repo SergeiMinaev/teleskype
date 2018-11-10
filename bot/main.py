@@ -146,7 +146,10 @@ def bot(msg):
         elif cmd.startswith(cbr_currency.aliases): r = cbr_currency(cmd)
         elif cmd.startswith(stats.aliases): r = stats(cmd)
         else:
-            r = show_image(cmd) if random.randint(0, 1) == 1 else say_random()
+            r = show_image(cmd)
+        if not r:
+            r = say_random()
+
         if r:
             r = make_msg(r, msg)
     return r
