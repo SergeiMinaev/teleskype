@@ -135,7 +135,7 @@ def bot(msg):
 
     write_stats(msg)
 
-    if msg.content.lower().startswith(f'{CMD_SIGN}{BOT_NAME} '):
+    if re.match(fr'^{CMD_SIGN}{BOT_NAME}[.!?, ]', msg.content, re.IGNORECASE):
         cmd = msg.content.lower().split(f'{BOT_NAME} ')[1].strip()
         if cmd in cmd_help.aliases: r = cmd_help(cmd)
         elif cmd.startswith('help'): r = module_help(cmd)
