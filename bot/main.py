@@ -137,9 +137,9 @@ def bot(msg):
     write_stats(msg)
 
     if len(re.split(fr'^{CMD_SIGN}{BOT_NAME}[.!?, ]', msg.content,
-            re.IGNORECASE)) == 2:
+            flags=re.IGNORECASE)) == 2:
         cmd = re.split(fr'^{CMD_SIGN}{BOT_NAME}[.!?, ]', msg.content,
-                re.IGNORECASE)[1].strip()
+                flags=re.IGNORECASE)[1].strip()
         if cmd in cmd_help.aliases: r = cmd_help(cmd)
         elif cmd.startswith('help'): r = module_help(cmd)
         elif cmd == 'make bridge': r = make_bridge(msg)
