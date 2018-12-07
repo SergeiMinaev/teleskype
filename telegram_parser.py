@@ -1,3 +1,4 @@
+import re
 from common import CommonMsg, bytes_to_object
 from telegram_common import bot
 
