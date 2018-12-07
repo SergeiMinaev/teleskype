@@ -28,7 +28,9 @@ def file_obj_from_msg(msg):
         file_obj.name = file_name
     return file_obj
 
-
+def make_hyperlinks(text):
+    text = re.sub(r'(https?://[^\s]+)', r'<a href="\g<1>">\g<1></a>', text)
+    return text
 
 def parsed_message(msg):
     if msg.reply_to_message:
@@ -37,6 +39,7 @@ def parsed_message(msg):
                     quoted_text=msg.reply_to_message.text)
             text += "\n<<< {0}".format(msg.text)
             return text
+    msg.text = make_hyperlinks(msg.text)
     return msg.text
 
 def parsed_name(msg):
