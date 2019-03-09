@@ -37,9 +37,16 @@ def make_hyperlinks(text):
 def parsed_message(msg):
     if msg.reply_to_message:
         if msg.reply_to_message.text:
-            text = "{quoted_text}".format(
-                    quoted_text=msg.reply_to_message.text)
-            text += "\n<<< {0}".format(msg.text)
+            if not msg.reply_to_message.from_user.is_bot:
+                quoted_name = parsed_name(msg.reply_to_message)
+                text = "\n>>> [{quoted_name}] {quoted_text}".format(
+                        quoted_name=quoted_name,
+                        quoted_text=msg.reply_to_message.text)
+            else:
+                text = "\n>>> {quoted_text}".format(
+                        quoted_text=msg.reply_to_message.text)
+
+            text += "\n>>>\n {0}".format(msg.text)
             return text
     msg.text = make_hyperlinks(msg.text)
     return msg.text
