@@ -55,9 +55,12 @@ def outgoing_handler():
                             outgoing['msg'].file_obj['obj'])
         if outgoing['msg'].is_cmd:
             if outgoing['msg'].cmd_conversation_name:
-                bot.set_chat_title(
-                        chat_id,
-                        outgoing['msg'].cmd_conversation_name)
+                try:
+                    bot.set_chat_title(
+                            chat_id,
+                            outgoing['msg'].cmd_conversation_name)
+                except:
+                    pass
 
 
 def status_checker():
