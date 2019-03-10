@@ -30,7 +30,8 @@ def file_obj_from_msg(msg):
     return file_obj
 
 def make_hyperlinks(text):
-    text = re.sub(r'(https?://[^\s]+)', r'<a href="\g<1>">\g<1></a>', text)
+# not displaying correctly in Skype
+    #text = re.sub(r'(https?://[^\s]+)', r'<a href="\g<1>">\g<1></a>', text)
     return text
 
 def parsed_message(msg):
