@@ -34,8 +34,11 @@ def make_hyperlinks(text):
     return text
 
 def parsed_message(msg):
-    msg.text = make_hyperlinks(msg.text)
-    return msg.text
+    if msg.text:
+        msg.text = make_hyperlinks(msg.text)
+        return msg.text
+    else:
+        return ""
 
 def parsed_quote(msg):
     if msg.reply_to_message:
