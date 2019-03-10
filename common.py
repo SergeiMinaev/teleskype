@@ -17,6 +17,7 @@ class CommonMsg():
     time = None
     content = None
     content_full = None
+    quote = None
     file_obj = {'name': None, 'obj': None}
 
 

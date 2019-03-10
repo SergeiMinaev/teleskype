@@ -34,21 +34,24 @@ def make_hyperlinks(text):
     return text
 
 def parsed_message(msg):
+    msg.text = make_hyperlinks(msg.text)
+    return msg.text
+
+def parsed_quote(msg):
     if msg.reply_to_message:
         if msg.reply_to_message.text:
             if not msg.reply_to_message.from_user.is_bot:
-                quoted_name = parsed_name(msg.reply_to_message)
-                text = "\n>>> [{quoted_name}] {quoted_text}".format(
-                        quoted_name=quoted_name,
-                        quoted_text=msg.reply_to_message.text)
+                quoted_name = f"[{parsed_name(msg.reply_to_message)}]"
             else:
-                text = "\n>>> {quoted_text}".format(
-                        quoted_text=msg.reply_to_message.text)
+                quoted_name = ""
+            text = "\n>>> {quoted_name} {quoted_text}\n>>>".format(
+                quoted_name=quoted_name,
+                quoted_text=msg.reply_to_message.text)
 
-            text += "\n>>>\n {0}".format(msg.text)
-            return text
-    msg.text = make_hyperlinks(msg.text)
-    return msg.text
+    try:
+        return text
+    except:
+        return None
 
 def parsed_name(msg):
     if msg.from_user.first_name and msg.from_user.last_name:
@@ -63,14 +66,20 @@ def parsed_name(msg):
 def parse_incoming_msg(tele_msg):
 
     def content_full(msg):
-        return  f"[{msg.user['name']}] {msg.content}"
+        if msg.quote:
+            return f"{msg.quote}\n[{msg.user['name']}] {msg.content}"
+        else:
+            return  f"[{msg.user['name']}] {msg.content}"
 
     msg = CommonMsg()
     msg.is_telegram = True
     msg.user = {
             'id': tele_msg.from_user.id,
             'name': parsed_name(tele_msg)}
+    if tele_msg.reply_to_message:
+        msg.is_quote = True
     msg.content = parsed_message(tele_msg)
+    msg.quote = parsed_quote(tele_msg)
     msg.chat_id = str(tele_msg.chat.id)
 
     if tele_msg.content_type != 'text':
