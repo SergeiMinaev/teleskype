@@ -59,8 +59,8 @@ def outgoing_handler():
                     bot.set_chat_title(
                             chat_id,
                             outgoing['msg'].cmd_conversation_name)
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
 
 
 def status_checker():
