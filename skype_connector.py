@@ -6,10 +6,13 @@ import logging
 from threading import Thread, Timer
 from datetime import datetime
 from time import sleep
-from skpy import Skype, SkypeAuthException, SkypeEventLoop
+from skpy import (
+        Skype,
+        SkypeAuthException,
+        SkypeEventLoop)
 from hub import outgoing_sk_msg_queue
 from common import incoming_msg_queue, is_image
-from skype_parser import parse_incoming_msg
+from skype_parser import parse_incoming_msg, parse_incoming_event
 
 TOKEN_FILE="skype_token"
 
@@ -27,6 +30,9 @@ class MySkype(SkypeEventLoop):
                     #event.msg.chat.sendMsg(event.msg.content)
                     msg = parse_incoming_msg(event.msg)
                     incoming_msg_queue.put(msg)
+        if event.type == 'ThreadUpdate':
+            msg = parse_incoming_event(event)
+            incoming_msg_queue.put(msg)
 
 def check_token_loop(conn):
     Timer(300, check_token_loop, [conn]).start()

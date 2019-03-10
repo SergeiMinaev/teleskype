@@ -37,7 +37,7 @@ def outgoing_handler():
             chat_id = outgoing['msg'].chat_id
         elif outgoing['msg'].is_skype: # forwarded message from skype to telegram
             chat_id = outgoing['bridge'].telegram_id
-        if chat_id:
+        if chat_id and not outgoing['msg'].is_cmd:
             if outgoing['msg'].content_full:
                 bot.send_message(
                         chat_id,
@@ -53,6 +53,11 @@ def outgoing_handler():
                     bot.send_document(
                             chat_id,
                             outgoing['msg'].file_obj['obj'])
+        if outgoing['msg'].is_cmd:
+            if outgoing['msg'].cmd_conversation_name:
+                bot.set_chat_title(
+                        chat_id,
+                        outgoing['msg'].cmd_conversation_name)
 
 
 def status_checker():

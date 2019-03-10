@@ -19,6 +19,8 @@ class CommonMsg():
     content_full = None
     quote = None
     file_obj = {'name': None, 'obj': None}
+    is_cmd = False
+    cmd_conversation_name = None
 
 
 def bytes_to_object(content, name):

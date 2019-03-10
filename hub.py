@@ -45,12 +45,13 @@ def hub():
         if bridge:
             forward_to_bridge(bridge, msg)
         bot_response = None
-        if not msg.file_obj['obj']:
-            bot_response = bot(msg)
-        if bot_response:
-            if bridge:
-                forward_to_bridge(bridge, bot_response)
-            else:
-                to_telegram = msg.is_telegram
-                to_skype = msg.is_skype
-                forward_to_bridge(None, bot_response, to_telegram, to_skype)
+        if not msg.is_cmd:
+            if not msg.file_obj['obj']:
+                bot_response = bot(msg)
+            if bot_response:
+                if bridge:
+                    forward_to_bridge(bridge, bot_response)
+                else:
+                    to_telegram = msg.is_telegram
+                    to_skype = msg.is_skype
+                    forward_to_bridge(None, bot_response, to_telegram, to_skype)
