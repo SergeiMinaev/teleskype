@@ -12,7 +12,7 @@ jedi==0.12.1
 lxml==4.2.5
 parso==0.3.1
 peewee==3.6.4
-Pillow==5.2.0
+Pillow==6.2.0
 pip-autoremove==0.9.1
 prompt-toolkit==1.0.15
 Pygments==2.2.0
